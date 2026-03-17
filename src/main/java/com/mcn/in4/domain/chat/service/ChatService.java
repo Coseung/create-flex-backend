@@ -25,7 +25,7 @@ public interface ChatService {
 
     // 처음 들어갔을때 조회
     List<ChatMessageDto> findMessages(String roomId, Long memberId, int size);
-
+//    List<ChatMessageDto> findMessages(String roomId, Long memberId);
     // 이전 메세지 조회
     List<ChatMessageDto> findOlderMessages(String roomId, Long lastId, int size);
 
