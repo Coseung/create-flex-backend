@@ -184,6 +184,58 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
+    // 기존에 채팅 메세지 한번에 가져오는 로직
+//    @Override
+//    @Transactional
+//    public List<ChatMessageDto> findMessages(String roomId, Long memberId) {
+//        //  메시지 & 채팅방 한 번에 조회 (JOIN FETCH)
+//        List<ChatMessage> messages = chatMessageRepository.findAllByRoomIdWithRoom(roomId);
+//        if (messages.isEmpty()) {
+//            return new ArrayList<>();
+//        }
+//
+//        //  채팅방 모든 멤버 & 상세정보 한 번에 조회 (JOIN FETCH)
+//        List<ChatRoomMember> allMembers = chatRoomMemberRepository.findAllByRoomIdWithMemberAndRoom(roomId);
+//        long totalMembers = allMembers.size();
+//
+//        //  내 읽음 상태 업데이트 및 이벤트 발행 (조건부)
+//        ChatMessage lastMessage = messages.get(messages.size() - 1);
+//        allMembers.stream()
+//                .filter(m -> m.getMember().getMemberId().equals(memberId))
+//                .findFirst()
+//                .ifPresent(m -> {
+//                    Long lastReadId = m.getLastReadMessageId();
+//                    Long currentLastId = lastMessage.getId();
+//
+//                    if (lastReadId == null || lastReadId < currentLastId) {
+//                        chatRoomMemberRepository.updateMemberLastReadMessage(roomId, memberId, currentLastId);
+//
+//                        // READ 이벤트 발행
+//                        ChatMessageDto readEvent = ChatMessageDto.builder()
+//                                .type(ChatMessageDto.MessageType.READ)
+//                                .roomId(roomId)
+//                                .senderId(memberId)
+//                                .message("READ_UPDATE")
+//                                .build();
+//                        messagingTemplate.convertAndSend("/sub/chat/room/" + roomId, readEvent);
+//                    }
+//                });
+//
+//        // 메모리 연산으로 DTO 변환 (N+1 없음)
+//        return messages.stream()
+//                .map(msg -> {
+//                    ChatMessageDto dto = ChatMessageDto.from(msg);
+//                    long readCount = allMembers.stream()
+//                            .filter(m -> m.getLastReadMessageId() != null && m.getLastReadMessageId() >= msg.getId())
+//                            .count();
+//                    long unreadCount = totalMembers - readCount;
+//                    dto.setUnreadCount(Math.max(0, unreadCount));
+//                    return dto;
+//                })
+//                .collect(Collectors.toList());
+//    }
+
+    //페이징 처리 로직
     @Override
     @Transactional
     public List<ChatMessageDto> findMessages(String roomId, Long memberId, int size) {

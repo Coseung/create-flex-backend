@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ChatController {
     private final SimpMessageSendingOperations messagingTemplate;
@@ -87,6 +86,7 @@ public class ChatController {
     public List<ChatMessageDto> getMessages(@PathVariable String roomId, @AuthenticationPrincipal String userId) {
         Long memberId = Long.parseLong(userId);
         return chatService.findMessages(roomId, memberId, 20);
+//        return chatService.findMessages(roomId, memberId);
     }
 
     // 이전 메세지 조회
