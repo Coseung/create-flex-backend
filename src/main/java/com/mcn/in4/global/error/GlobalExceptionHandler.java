@@ -4,6 +4,8 @@ import com.mcn.in4.global.error.exception.CustomAuthenticationException;
 import com.mcn.in4.global.error.exception.CustomException;
 import com.mcn.in4.global.error.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,6 +31,19 @@ public class GlobalExceptionHandler {
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode, e.getDetailedMessage());
         return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+
+    /**
+     * DB 제약 조건 위반 예외 처리 (Unique Key 중복 등록 등)
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        log.error("handleDataIntegrityViolationException (데이터 중복 발생)", e);
+
+        // ErrorCode.DUPLICATE_MEMBER_ACCOUNT = "이미 존재하는 사번/아이디입니다." (Status: 409
+        // CONFLICT)
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.DUPLICATE_MEMBER_ACCOUNT);
+        return new ResponseEntity<>(response, ErrorCode.DUPLICATE_MEMBER_ACCOUNT.getStatus());
     }
 
     /**

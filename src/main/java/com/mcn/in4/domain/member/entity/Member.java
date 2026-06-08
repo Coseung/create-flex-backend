@@ -3,6 +3,8 @@ package com.mcn.in4.domain.member.entity;
 import com.mcn.in4.domain.department.entity.Department;
 import com.mcn.in4.domain.member.entity.memberEnum.MemberRole;
 import com.mcn.in4.domain.member.entity.memberEnum.MemberStatus;
+
+import groovyjarjarantlr4.v4.parse.BlockSetTransformer.topdown_return;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +26,7 @@ public class Member {
     private Department department;
     // 사용자 소속 부서 키 (상위 엔티티 삭제시 NULL화)
 
-    @Column(name = "member_account", nullable = false)
+    @Column(name = "member_account", nullable = false, unique = true)
     private String memberAccount;
     // 사번 (아이디)
 
