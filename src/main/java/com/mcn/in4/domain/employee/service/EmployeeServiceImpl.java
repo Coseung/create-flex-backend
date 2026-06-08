@@ -161,8 +161,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 MemberStatus.SUSPENDED);
 
                 // 오늘 출근한 전체 인원 계산 (근무중 + 퇴근자 포함)
-                List<Attendance> allTodayAttendances = attendanceRepository.findAllByAttendanceDate(today);
-                long workingCount = allTodayAttendances.size(); // 오늘 출근 기록이 있으면 일단 '근무 가능 인원'으로 간주
+                long workingCount = attendanceRepository.countByAttendanceDate(today);
 
                 // 휴가 중인 인원 (기존 방식 유지)
                 long vacationCount = vacationRepository.countActiveVacations(today, VacationApprove.APPROVED);
