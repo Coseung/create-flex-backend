@@ -3,6 +3,8 @@ package com.mcn.in4.domain.employee.dto.requestDTO;
 import com.mcn.in4.domain.member.entity.memberEnum.EmploymentType;
 import com.mcn.in4.domain.member.entity.memberEnum.MemberRole;
 import com.mcn.in4.domain.member.entity.memberEnum.MemberStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 public class EmployeeRequestDTO {
@@ -12,22 +14,46 @@ public class EmployeeRequestDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class EmployeeInsertRequestDto {
         // Member 엔티티 속 데이터
+        @NotBlank(message = "아이디는 필수 입력값입니다.")
         private String memberAccount; // 아이디
+
+        @NotBlank(message = "이름은 필수 입력값입니다.")
         private String memberName; // 이름
+
+        @NotNull(message = "권한은 필수 입력값입니다.")
         private MemberRole memberRole; // 권한
+
+        @NotNull(message = "재직상태는 필수 입력값입니다.")
         private MemberStatus memberStatus; // 재직, 휴직
+
+        @NotBlank(message = "직무는 필수 입력값입니다.")
         private String task;// 직무
+
+        @NotNull(message = "부서는 필수 입력값입니다.")
         private Integer departmentid; // 부서 아이디
+
+        @NotBlank(message = "비밀번호는 필수 입력값입니다.")
         private String password; // 비밀번호
 
         // MemberEmployeeDetail 엔티티 속 데이터
         private String nickname; // 닉네임
+
+        @NotBlank(message = "개인 이메일은 필수 입력값입니다.")
         private String personalEmail; // 개인 계정
+
+        @NotBlank(message = "개인 전화번호는 필수 입력값입니다.")
         private String personalCall; // 개인 전화번호
+
         private String address; // 주소
         private String engName;// 영어이름
+
+        @NotBlank(message = "사내 이메일은 필수 입력값입니다.")
         private String corporEmail; // 사내 이메일
+
+        @NotBlank(message = "입사일은 필수 입력값입니다.")
         private String hireDate; // 입사일
+
+        @NotNull(message = "입사유형은 필수 입력값입니다.")
         private EmploymentType employmentType; // 입사유형 NEWBIE, EXPERIENCED
     }
 
