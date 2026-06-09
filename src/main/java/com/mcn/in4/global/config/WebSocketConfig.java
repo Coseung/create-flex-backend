@@ -1,6 +1,7 @@
 package com.mcn.in4.global.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -23,11 +24,30 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
+    @Value("${spring.rabbitmq.host}")
+    private String rabbitmqHost;
+    @Value("${spring.rabbitmq.stomp.port}")
+    private int stompPort;
+    @Value("${spring.rabbitmq.username}")
+    private String username;
+    @Value("${spring.rabbitmq.password}")
+    private String password;
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // /sub가 api에 prefix로 붙은 경우, messageBroker가 해당 경로를 가로채 처리
-        // 해당 경로 /sub으로 SimpleBroker를 등록
-        registry.enableSimpleBroker("/sub");
+        // // /sub가 api에 prefix로 붙은 경우, messageBroker가 해당 경로를 가로채 처리
+        // // 해당 경로 /sub으로 SimpleBroker를 등록
+        // registry.enableStompBrokerRelay(
+        // "/" +
+        // "/sub");
+
+        registry.enableStompBrokerRelay("/topic", "/queue")
+                .setRelayHost(rabbitmqHost)
+                .setRelayPort(stompPort)
+                .setClientLogin(username)
+                .setClientPasscode(password)
+                .setSystemLogin(username)
+                .setSystemPasscode(password);
         // 클라이언트가 메시지를 보낼 때, 경로 앞에 /pub가 붙어있으면 Broker로 보내져 처리
         registry.setApplicationDestinationPrefixes("/pub");
     }

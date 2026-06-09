@@ -73,6 +73,9 @@ dependencies {
 
 	//유효성 검사
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// Reactor Netty (STOMP 브로커 릴레이용 TCP 클라이언트)
+	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
 }
 
 tasks.named('test') {
