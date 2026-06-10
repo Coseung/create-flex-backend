@@ -50,7 +50,7 @@ public class ChatController {
         chatService.saveMessage(message);
 
         // 구독자들에게 전송 (/sub/chat/room/{roomId})
-        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        messagingTemplate.convertAndSend("/topic/chat.room." + message.getRoomId(), message);
 
     }
 

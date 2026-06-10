@@ -46,7 +46,7 @@ public class CreatorTodoWebSocketController {
             response.put("clientUuid", request.getClientUuid());
 
             // 3. 해당 크리에이터 보드 구독자에게 브로드캐스트
-            String destination = "/sub/creator-todo/" + request.getCreatorId();
+            String destination = "/topic/creator-todo/" + request.getCreatorId();
             messagingTemplate.convertAndSend(destination, response);
             log.debug(">>> 브로드캐스팅 완료: {}", destination);
 
@@ -83,7 +83,7 @@ public class CreatorTodoWebSocketController {
         response.put("createdAt", todo.getCreatedAt() != null ? todo.getCreatedAt().toString() : null);
         response.put("clientUuid", payload.get("clientUuid"));
 
-        String destination = "/sub/creator-todo/" + creatorId;
+        String destination = "/topic/creator-todo/" + creatorId;
         messagingTemplate.convertAndSend(destination, response);
         log.info(">>> Todo 생성 알림: creatorId={}, todoId={}, createdByName={}", creatorId, todoId, todo.getCreatedByName());
     }
@@ -101,7 +101,7 @@ public class CreatorTodoWebSocketController {
         response.put("todoId", payload.get("todoId"));
         response.put("clientUuid", payload.get("clientUuid"));
 
-        String destination = "/sub/creator-todo/" + creatorId;
+        String destination = "/topic/creator-todo/" + creatorId;
         messagingTemplate.convertAndSend(destination, response);
         log.info(">>> Todo 삭제 알림: todoId={}", payload.get("todoId"));
     }
@@ -118,7 +118,7 @@ public class CreatorTodoWebSocketController {
         response.put("type", "TODO_UPDATED");
         response.putAll(payload);
 
-        String destination = "/sub/creator-todo/" + creatorId;
+        String destination = "/topic/creator-todo/" + creatorId;
         messagingTemplate.convertAndSend(destination, response);
         log.info(">>> Todo 수정 알림: todoId={}", payload.get("todoId"));
     }
@@ -130,7 +130,7 @@ public class CreatorTodoWebSocketController {
         errorResponse.put("errorMessage", message);
         errorResponse.put("clientUuid", request.getClientUuid());
 
-        String destination = "/sub/creator-todo/" + request.getCreatorId();
+        String destination = "/topic/creator-todo/" + request.getCreatorId();
         messagingTemplate.convertAndSend(destination, errorResponse);
     }
 }

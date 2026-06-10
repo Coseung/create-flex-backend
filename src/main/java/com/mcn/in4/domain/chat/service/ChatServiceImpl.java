@@ -142,7 +142,7 @@ public class ChatServiceImpl implements ChatService {
     // .collect(Collectors.toList());
     // }
     private List<Long> findConnectedUsers(String roomId) {
-        String destination = "/sub/chat/room/" + roomId;
+        String destination = "/topic/chat.room." + roomId;
 
         // 디버깅 로그
         log.info(" findConnectedUsers 호출: roomId={}", roomId);
@@ -291,7 +291,7 @@ public class ChatServiceImpl implements ChatService {
                                 .senderId(memberId)
                                 .message("READ_UPDATE")
                                 .build();
-                        messagingTemplate.convertAndSend("/sub/chat/room/" + roomId, readEvent);
+                        messagingTemplate.convertAndSend("/topic/chat.room." + roomId, readEvent);
                     }
                 });
     }
